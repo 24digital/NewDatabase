@@ -10,7 +10,13 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class ContactHelper extends SQLiteOpenHelper {
 
-    private Cursor cursor;
+
+
+    private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + ContactContract.Table_Name + " (" +
+          ContactContract.Column_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + ContactContract.NAME
+            + " TEXT NOT NULL,"
+            + ContactContract.phone+ " INTEGER NOT NULL )";
+
 
     public ContactHelper(Context context, String databaseName, int version) {
         super(context, databaseName, null, version);
@@ -20,7 +26,7 @@ public class ContactHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL(SQL_CREATE_ENTRIES);
     }
 
     @Override

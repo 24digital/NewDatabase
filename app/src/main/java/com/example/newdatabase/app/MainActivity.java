@@ -6,37 +6,43 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
+import android.widget.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 
 public class MainActivity extends ListActivity {
-
+private List<Contact>contactlist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Contact_DAO myDAO = new Contact_DAO(this);
         Cursor cursor = this.getContentResolver().query(ContactContract.CONTENT_URI, null, null, null, null);
-   List<Contact> contactlist = myDAO.getAllContacts();
+
+        try {
+            myDAO.createContact("Marion",879513851);
+          contactlist = myDAO.getAllContacts();
+            System.out.println(contactlist);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         startManagingCursor(cursor);
         ListView mainView = (ListView) findViewById(android.R.id.list);
 
         mainView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                TextView textView = (TextView)view;
+                Toast message = Toast.makeText(getApplicationContext(),textView.getText(),Toast.LENGTH_SHORT);
                 return false;
             }
         });
-        ListAdapter adapter = new SimpleCursorAdapter(this, R.layout.two_list_items, cursor, new String[]{
+     /*   ListAdapter adapter = new SimpleCursorAdapter(this, R.layout.two_list_items, cursor, new String[]{
                 ContactContract.NAME, ContactContract.phone
-        }, new int[]{R.id.name_text, R.id.number_text});
-
-
+        }, new int[]{R.id.name_text, R.id.number_text});*/
+        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,contactlist);
         setListAdapter(adapter);
     }
 

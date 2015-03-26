@@ -35,6 +35,11 @@ public class Contact_DAO {
         values.put(ContactContract.NAME, name);
         values.put(ContactContract.phone, number);
 
+        if(database == null)
+      {
+          close();
+            database = helper.getWritableDatabase();
+        }
         long insertID = database.insert(ContactContract.Table_Name, null, values);
 
         cursor = database.query(ContactContract.Table_Name,
@@ -48,10 +53,14 @@ public class Contact_DAO {
     }
 
 
-    public List<Contact> getAllContacts() {
+    public List<Contact> getAllContacts() throws SQLException{
+        this.open();
         List<Contact> contacts = new ArrayList<Contact>();
-
-        Cursor cursor = database.rawQuery("Select * from "+ContactContract.Table_Name,)
+    if(database ==null)
+    {
+        database = helper.getReadableDatabase();
+    }
+        Cursor cursor = database.rawQuery("Select * from "+ContactContract.Table_Name,null);
 
         cursor.moveToFirst();
 
@@ -59,23 +68,23 @@ public class Contact_DAO {
             Contact contact = new Contact();
             contact.setName(cursor.getString(1));
             contact.setNumber(cursor.getLong(2));
-            contact.setName(cursor.getString(1));
-            contact.setNumber(cursor.getLong(2));
+
             contacts.add(contact);
             cursor.moveToNext();
         }
         cursor.close();
+        close();
         return contacts;
     }
 
     public void deleteComment(Contact contact) {
         long id = contact.getId();
-        System.out.println("Comment deleted with id: " + id);
+        System.out.println("Contact deleted with id: " + id);
         database.delete(ContactContract.Table_Name, ContactContract.Column_ID
                 + " = " + id, null);
     }
 
-    public Cursor getCursor() {
+    public Cursor getCursor()throws SQLException {
         if (isCursor()) {
             this.getAllContacts();
 

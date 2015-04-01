@@ -25,6 +25,7 @@ public class MainActivity extends ListActivity {
 
     if(contactlist ==null) {
         try {
+            //insert contacts
     myDAO.createContact("Marion", "843589452");
             myDAO.createContact("Marion", "843589452");
             myDAO.createContact("Corey Mark", "8435894532");
@@ -39,9 +40,10 @@ public class MainActivity extends ListActivity {
         }
 
     }
-     //   startManagingCursor(cursor);
+    //Get listview to manage
         ListView mainView = (ListView) findViewById(android.R.id.list);
 
+        //Set click listener
       mainView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
           @Override
           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -51,6 +53,7 @@ public class MainActivity extends ListActivity {
           }
       });
 
+//Setup long click listener
         mainView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -60,10 +63,7 @@ public class MainActivity extends ListActivity {
                 return true;
             }
         });
-     /*   ListAdapter adapter = new SimpleCursorAdapter(this, R.layout.two_list_items, cursor, new String[]{
-                ContactContract.NAME, ContactContract.phone
-        }, new int[]{R.id.name_text, R.id.number_text});*/
-      //  SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(this,R.layout.activity_main,cursor,);
+//Commit binding
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, contactlist);
         setListAdapter(adapter);
     }
@@ -100,6 +100,7 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
+        //Commit binding of already stored data again after orientation change
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,state.getStringArrayList("contacts"));
         setListAdapter(adapter);
 
@@ -108,6 +109,8 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        //Commit array list to bundle which must be of strings
         ArrayList<String> temp = new ArrayList<String>();
         for(int i = 0; i< contactlist.size(); i++)
         {

@@ -25,7 +25,13 @@ public class MainActivity extends ListActivity {
 
     if(contactlist ==null) {
         try {
-            myDAO.createContact("Marion", 879513851);
+    myDAO.createContact("Marion", "843589452");
+            myDAO.createContact("Marion", "843589452");
+            myDAO.createContact("Corey Mark", "8435894532");
+            myDAO.createContact("Michael Lewis", "8435894552");
+            myDAO.createContact("Jimmy Hoove", "8435889452");
+            myDAO.createContact("Same Richard", "843589452");
+            myDAO.createContact("Vick Sam", "8435891452");
             contactlist = myDAO.getAllContacts();
             System.out.println(contactlist);
         } catch (SQLException e) {
@@ -94,12 +100,20 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,state.getStringArrayList("contacts"));
+        setListAdapter(adapter);
 
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putStringArrayList("conacts",contactlist);
+        ArrayList<String> temp = new ArrayList<String>();
+        for(int i = 0; i< contactlist.size(); i++)
+        {
+
+            temp.add(contactlist.get(i).toString());
+        }
+        outState.putStringArrayList("contacts",temp);
     }
 }

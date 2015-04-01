@@ -7,42 +7,58 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import org.w3c.dom.Text;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends ListActivity {
-private List<Contact>contactlist;
+    private ArrayList<Contact> contactlist;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Contact_DAO myDAO = new Contact_DAO(this);
-        Cursor cursor = this.getContentResolver().query(ContactContract.CONTENT_URI, null, null, null, null);
 
+    if(contactlist ==null) {
         try {
-            myDAO.createContact("Marion",879513851);
-          contactlist = myDAO.getAllContacts();
+            myDAO.createContact("Marion", 879513851);
+            contactlist = myDAO.getAllContacts();
             System.out.println(contactlist);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        startManagingCursor(cursor);
+
+    }
+     //   startManagingCursor(cursor);
         ListView mainView = (ListView) findViewById(android.R.id.list);
+
+      mainView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+          @Override
+          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+              TextView tempMessage = (TextView)view;
+              Toast message = Toast.makeText(MainActivity.this,tempMessage.getText(),Toast.LENGTH_LONG);
+              message.show();
+          }
+      });
 
         mainView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View view) {
-                TextView textView = (TextView)view;
-                Toast message = Toast.makeText(getApplicationContext(),textView.getText(),Toast.LENGTH_SHORT);
-                return false;
+            public boolean onLongClick(View v) {
+                TextView viewTemp = (TextView)v;
+            Toast message = Toast.makeText(MainActivity.this,viewTemp.getText(),Toast.LENGTH_LONG);
+                message.show();
+                return true;
             }
         });
      /*   ListAdapter adapter = new SimpleCursorAdapter(this, R.layout.two_list_items, cursor, new String[]{
                 ContactContract.NAME, ContactContract.phone
         }, new int[]{R.id.name_text, R.id.number_text});*/
-        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,contactlist);
+      //  SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(this,R.layout.activity_main,cursor,);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, contactlist);
         setListAdapter(adapter);
     }
 
@@ -78,11 +94,12 @@ private List<Contact>contactlist;
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
+
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        
+        outState.putStringArrayList("conacts",contactlist);
     }
 }

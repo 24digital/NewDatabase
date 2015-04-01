@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.SimpleCursorAdapter;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,17 +36,16 @@ public class Contact_DAO {
         values.put(ContactContract.NAME, name);
         values.put(ContactContract.phone, number);
 
-        if(database == null)
-      {
-          close();
+        if (database == null) {
+
             database = helper.getWritableDatabase();
         }
-        long insertID = database.insert(ContactContract.Table_Name, null, values);
+         database.insert(ContactContract.Table_Name, null, values);
 
         cursor = database.query(ContactContract.Table_Name,
                 allColumns, null, null,
                 null, null, null);
-        cursor.moveToFirst();
+        cursor.moveToLast();
         Contact contact = new Contact();
         contact.setName(cursor.getString(0));
         contact.setNumber(cursor.getLong(1));
@@ -53,14 +53,13 @@ public class Contact_DAO {
     }
 
 
-    public List<Contact> getAllContacts() throws SQLException{
+    public ArrayList<Contact> getAllContacts() throws SQLException {
         this.open();
-        List<Contact> contacts = new ArrayList<Contact>();
-    if(database ==null)
-    {
-        database = helper.getReadableDatabase();
-    }
-        Cursor cursor = database.rawQuery("Select * from "+ContactContract.Table_Name,null);
+        ArrayList<Contact> contacts = new ArrayList<Contact>();
+        if (database == null) {
+            database = helper.getReadableDatabase();
+        }
+        Cursor cursor = database.rawQuery("Select * from " + ContactContract.Table_Name, null);
 
         cursor.moveToFirst();
 
@@ -84,7 +83,7 @@ public class Contact_DAO {
                 + " = " + id, null);
     }
 
-    public Cursor getCursor()throws SQLException {
+    public Cursor getCursor() throws SQLException {
         if (isCursor()) {
             this.getAllContacts();
 

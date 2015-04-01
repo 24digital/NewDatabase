@@ -30,7 +30,7 @@ public class Contact_DAO {
         helper.close();
     }
 
-    public Contact createContact(String name, long number) {
+    public Contact createContact(String name, String number) {
         ContentValues values = new ContentValues();
         values.put(ContactContract.NAME, name);
         values.put(ContactContract.phone, number);

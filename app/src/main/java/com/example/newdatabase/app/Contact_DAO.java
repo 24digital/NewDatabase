@@ -4,11 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.SimpleCursorAdapter;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Marion on 03/20/15.
@@ -40,7 +38,7 @@ public class Contact_DAO {
 
             database = helper.getWritableDatabase();
         }
-         database.insert(ContactContract.Table_Name, null, values);
+        database.insert(ContactContract.Table_Name, null, values);
 
         cursor = database.query(ContactContract.Table_Name,
                 allColumns, null, null,

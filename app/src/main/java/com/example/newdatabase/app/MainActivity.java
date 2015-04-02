@@ -1,17 +1,14 @@
 package com.example.newdatabase.app;
 
 import android.app.ListActivity;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-import org.w3c.dom.Text;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends ListActivity {
@@ -20,7 +17,7 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.land_orient);
         Contact_DAO myDAO = new Contact_DAO(this);
 
     if(contactlist ==null) {
@@ -33,8 +30,10 @@ public class MainActivity extends ListActivity {
             myDAO.createContact("Jimmy Hoove", "8435889452");
             myDAO.createContact("Same Richard", "843589452");
             myDAO.createContact("Vick Sam", "8435891452");
+
+           //Get all stored contacts
             contactlist = myDAO.getAllContacts();
-            System.out.println(contactlist);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
